@@ -1,0 +1,33 @@
+{
+  "name": "teste-front-end-toro-investimentos",
+  "version": "1.0.0",
+  "description": "Front End desenvolvido par ao teste com a toro investimentos",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/williamazevedodepaula/teste-front-end-toro-investimentos.git"
+  },
+  "author": "William Azevedo de Paula",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/williamazevedodepaula/teste-front-end-toro-investimentos/issues"
+  },
+  "homepage": "https://github.com/williamazevedodepaula/teste-front-end-toro-investimentos#readme",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-material": "^1.1.20",
+    "angular-animate": "^1.5.8",
+    "angular-aria": "^1.5.8",
+    "angular-chart.js": "^1.1.1",
+    "angular-messages": "^1.5.8",
+    "angular-resource": "^1.5.8",
+    "angular-route": "^1.5.8",
+    "angular-ui-router": "^1.0.18",
+    "jquery": "^3.4.1",
+    "typescript": "^3.7.2",
+    "webpack": "^3.3.0"
+  }
+}

@@ -1,0 +1,10 @@
+version: '3'
+services:
+  quotes:
+    build: ./
+    image: quotes-front-end
+    container_name: quotes-front-end
+    ports: 
+      - "9000:80"
+    environment: 
+      - SERVER_ADDRESS=0.0.0.0:8080/quotes
