@@ -1,14 +1,14 @@
 
 /**
   * @ngdoc component
-  * @name quotes.component:quotesPage
+  * @name quotesModule.component:quotesPage
   * @description
   * Componente referente à tela de listagem de cotações
   * 
 */
-angular.module('quotes').component('quotesPage',{
+angular.module('quotesModule').component('quotesPage',{
     templateUrl:'./src/components/pages/quotes/quotes-page.html',
-    controller:quotesPageController,
+    controller:['QuotesService',quotesPageController],
     bindings:{
         
     }
@@ -18,11 +18,11 @@ angular.module('quotes').component('quotesPage',{
 /**
   * @this vm
   * @ngdoc controller
-  * @name quotes.controller:quotesPageController
+  * @name quotesModule.controller:quotesPageController
   *
   * @description
   * Controlador do componente quotesPage
 */
-function quotesPageController(){
-
+function quotesPageController(QuotesService){
+  
 }

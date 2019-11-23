@@ -2,7 +2,7 @@
 
 /**
   * @ngdoc overview
-  * @name quotes.module:quotes
+  * @name quotesModule.module:quotesModule
   *
   * @description
   * Módulo responsável pela exibição das quotações de ações
@@ -10,11 +10,11 @@
   * @example
   *  <b>script.js</b>
   *  <pre>
-  *  angular.module('quotes', [quotes]);
+  *  angular.module('quotesModule', []);
   *  </pre>
   * 
 */
-let quotesApp = angular.module("quotes",['ui.router']);
+let quotesApp = angular.module("quotesModule",['ui.router']);
 
 
 quotesApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider){

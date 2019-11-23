@@ -5,12 +5,16 @@
     <head>
         <script src="./node_modules/jquery/dist/jquery.min.js"></script>
         <script src="./node_modules/angular/angular.min.js"></script>
-        <script src="./node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+        <script src="./node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>        
+        <script src="./node_modules/angular-mocks/angular-mocks.js"></script>        
 
-        <script src="./src/module/quotes.js"></script>
-        <script src="./src/components/pages/quotes/quotes-page.ts"></script>
+        <script src="./src/module/app.js"></script>
+
+        <script src="./src/components/pages/quotes/quotes-page-controller.js"></script>
+
+        <script src="./src/services/quotesService.js"></script>
     </head>
-    <body ng-app="quotes">
+    <body ng-app="quotesModule">
         
         <div ui-view="content" id="page-content" class=""></div>
 
