@@ -26,6 +26,7 @@ angular.module('quotesModule').component('quotesPage',{
 function quotesPageController(QuotesService){
   var ctrl = this;
   this.isConnected = false;
+  this.quoteList = [];
 
 
   this.onQuoteReceived = function(quote){
