@@ -29,9 +29,22 @@ function quotesPageController(QuotesService){
   this.quoteList = [];
 
 
-  this.onQuoteReceived = function(quote){
-    console.log(quote);
+  this.onQuoteReceived = function(newQuote){
+    let found = this.quoteList.find((quote)=>{
+      return quote.name == newQuote.name;
+    });
 
+    if(!foud){
+      found = {   
+        name:newQuote.name,     
+        history: []
+      }
+      this.quoteList.push(found);
+    }
+
+    found.currentValue = newQuote.currentValue;
+
+    found.history.push(newQuote);
   }
 
   
