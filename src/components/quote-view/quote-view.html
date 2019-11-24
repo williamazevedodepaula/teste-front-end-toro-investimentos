@@ -1,13 +1,22 @@
 <div>
     <md-card md-theme-watch>
-        <md-card-title>
-            <md-card-title-text>
+        <md-card-title flex layout="row">
+            <md-card-title-text layout="column" flex-xs="50" flex-gt-sm="30">
                 <span class="md-headline">{{$ctrl.quote.name}}</span>
                 <span class="md-subhead">{{$ctrl.quote.currentValue|currency:'R$'}}</span>
+
+                <img class="quote-symbol" ng-src="{{$ctrl.getSymboUrl()}}" />
+
             </md-card-title-text>
-            <md-card-title-media>
+            <md-card-title-media flex>
                 <div class="md-media-lg card-media"></div>
             </md-card-title-media>
         </md-card-title>
     </md-card>
 </div>
+
+<style>
+    quote-view .quote-symbol{
+        width:100%
+    }
+</style>

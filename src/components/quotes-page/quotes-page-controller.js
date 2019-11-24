@@ -107,6 +107,7 @@ function quotesPageController(QuotesService, $scope, $interval, $timeout) {
     if (!found) {
       found = {
         name: newQuote.name,
+        symbol:newQuote.symbol,
         history: []
       }
       ctrl.quotesList.push(found);
@@ -118,6 +119,8 @@ function quotesPageController(QuotesService, $scope, $interval, $timeout) {
     if (found.history.length > 100) {
       found.history = found.history.slice(1, found.history.length);
     }
+
+    console.log($ctrl.quotesList);
   }
 
 
@@ -139,7 +142,7 @@ function quotesPageController(QuotesService, $scope, $interval, $timeout) {
     * @returns {Array.Object} a subset of quotesList, presententing the top N better quotes
   */
   this.getBetterEvaluatedQuotes = function () {
-    return ctrl.quotesList.sort(function (a, b) { return b.currentValue - a.currentValue }).slice(0, ctrl.quotesToShow);
+    return ctrl.quotesList.sort(function (a, b) { return b.currentValue - a.currentValue }).slice(0, ctrl.quotesToShow);    
   }
 
 

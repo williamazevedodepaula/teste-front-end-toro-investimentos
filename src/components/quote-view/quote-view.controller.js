@@ -55,7 +55,8 @@ function quotesViewController(QuotesService,$scope){
   this.quote;
 
   this.getSymboUrl = function(){
-      return `https://cdn.toroinvestimentos.com.br/corretora/images/quote/${quote.symbol}.svg`
+      if(!this.quote || !this.quote.symbol) return '';
+      return `https://cdn.toroinvestimentos.com.br/corretora/images/quote/${this.quote.symbol}.svg`;
   }
 
 }

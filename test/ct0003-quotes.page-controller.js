@@ -114,6 +114,7 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
         quotesPage.should.have.property("quotesList").that.is.an("array").with.length(1,`A new item must have been created in the list for the received quote`);
         quotesPage.quotesList[0].should.have.property("name").that.equals(newArrivingQuote.name);
         quotesPage.quotesList[0].should.have.property("currentValue").that.equals(newArrivingQuote.value);
+        quotesPage.quotesList[0].should.have.property("symbol").that.equals(newArrivingQuote.symbol);
         quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(1,'the item must be in the history of the quote');
         quotesPage.quotesList[0].history[0].should.have.property('value').that.equals(newArrivingQuote.value);
         quotesPage.quotesList[0].history[0].should.have.property('timestamp').that.equals(newArrivingQuote.timestamp);
@@ -124,6 +125,7 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
         quotesPage.should.have.property("quotesList").that.is.an("array").with.length(2,`A new item must have been created in the list for the received quote (2)`);
         quotesPage.quotesList[1].should.have.property("name").that.equals(newArrivingQuote.name);
         quotesPage.quotesList[1].should.have.property("currentValue").that.equals(newArrivingQuote.value);
+        quotesPage.quotesList[1].should.have.property("symbol").that.equals(newArrivingQuote.symbol);
         quotesPage.quotesList[1].should.have.property("history").that.is.an("array").with.length(1,'the item must be in the history of the quote (2)');
         quotesPage.quotesList[1].history[0].should.have.property('value').that.equals(newArrivingQuote.value);
         quotesPage.quotesList[1].history[0].should.have.property('timestamp').that.equals(newArrivingQuote.timestamp);        
@@ -180,7 +182,6 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
         }
 
     })
-
 
     it('Should return the better evaluated quotes',async function(){
         let quotesPage = $componentController('quotesPage');
