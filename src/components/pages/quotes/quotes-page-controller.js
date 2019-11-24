@@ -24,5 +24,29 @@ angular.module('quotesModule').component('quotesPage',{
   * Controlador do componente quotesPage
 */
 function quotesPageController(QuotesService){
+  var ctrl = this;
+  this.isConnected = false;
+
+
+  this.onQuoteReceived = function(quote){
+    console.log(quote);
+
+  }
+
   
+  this.$onInit = async function(){
+    tryConnect();
+
+    async function tryConnect(){
+      if(!QuotesService.isConnected()){
+        try{
+          await QuotesService.initConnection();
+          QuotesService.onQuoteReceived(ctrl.onQuoteReceived);
+          ctrl.isConnected = true;
+        }catch(e){
+          setTimeout(tryConnect,500);
+        }
+      }
+    }
+  }
 }
