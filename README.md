@@ -10,18 +10,23 @@ IMPORTANTE: O passo 1 é necessário apenas na primeira vez em que for acessar.
 ### 1) Realizar o build da imagem do docker:
 
 Dentro do diretório raiz do projeto, executar o comando:
-
+<pre>
  docker-compose -f docker-compose.yml build --no-cache quotes
+</pre>
 
 ### 2) Iniciar o container
 
 Dentro do diretório raiz do projeto, executar o comando:
 
+<pre>
  docker-compose -f docker-compose.yml up -d
+</pre>
 
 Conferir o log, utilizando o comando:
 
+<pre>
  docker-compose -f docker-compose.yml logs -f
+</pre>
 
 Importante: Na primeira vez, a execução irá demorar um pouco mais, pois o comando de inicialização irá executar automaticamente
 o "npm install", para instalar as dependências. 
@@ -41,10 +46,14 @@ A aplicação começará a exibir as ações assim que o servidor "quotesmock" f
 
 Para executar os testes, executar o seguinte comando, dentro do direório do projeto, enquanto a aplicação estiver executando:
 
-npm test
+<pre>
+ npm test
+</pre>
 
 ### 5) Interromper a aplicação
 
 Para interromper a aplicação, executar o seguinte comando, dentro do diretório do projeto:
 
-docker-compose -f docker-compose.yml down
+<pre>
+ docker-compose -f docker-compose.yml down
+</pre>
