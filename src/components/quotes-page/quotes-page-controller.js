@@ -17,7 +17,10 @@ angular.module('quotesModule').component('quotesPage', {
   bindings: {
 
   }
-})
+});
+
+//Holds the promise of $interval, so it can be cancelled
+var intervalPromise;
 
 
 /**
@@ -110,7 +113,7 @@ function quotesPageController(QuotesService, $interval) {
     if (!found) {
       found = {
         name: newQuote.name,
-        symbol:newQuote.symbol,
+        symbol: newQuote.symbol,
         history: []
       }
       ctrl.quotesList.push(found);
@@ -143,7 +146,7 @@ function quotesPageController(QuotesService, $interval) {
     * @returns {Array.Object} a subset of quotesList, presententing the top N better quotes
   */
   this.getBetterEvaluatedQuotes = function () {
-    return ctrl.quotesList.sort(function (a, b) { return b.currentValue - a.currentValue }).slice(0, ctrl.quotesToShow);    
+    return ctrl.quotesList.sort(function (a, b) { return b.currentValue - a.currentValue }).slice(0, ctrl.quotesToShow);
   }
 
 
@@ -207,7 +210,7 @@ function quotesPageController(QuotesService, $interval) {
   */
   this.$onInit = async function () {
     await tryConnect();
-    $interval(() => {
+    intervalPromise = $interval(() => {
       tryConnect();
     }, 500);
 
@@ -220,5 +223,22 @@ function quotesPageController(QuotesService, $interval) {
         } catch (e) { }
       }
     }
+  }
+
+  
+
+  /**
+    * @ngdoc method
+    * @name quotesViewController.$onDestroy
+    *
+    * @methodOf
+    * quotesModule.controller:quotesViewController
+    *
+    * @description
+    * 
+    * Component Deinitialization. cancel the interval promise
+  */
+  this.$onDestroy = function () {
+    $interval.cancel(intervalPromise);
   }
 }

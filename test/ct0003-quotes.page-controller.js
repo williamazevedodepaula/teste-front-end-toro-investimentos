@@ -25,7 +25,6 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
         stubs.forEach((stub)=>{stub.restore});
     })
 
-
     it('Should connect on init', async function () {
         spies = [sinon.spy(QuotesService,"initConnection")];
 
@@ -153,7 +152,7 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
         quotesPage.quotesList[1].should.have.property("currentValue").that.equals(newArrivingQuote.value,`The new quote received becomes the new currentValue (3)`);
     });
 
-    it('Should keep only 100 itens in history', async function () {
+    it('Should keep only 50 itens in history', async function () {
         let quotesPage = $componentController('quotesPage');
         let newArrivingQuote;
         stubs = [
@@ -162,23 +161,23 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
 
         quotesPage.$onInit();
 
-        for(let i=1; i <= 100; i++){
+        for(let i=1; i <= 50; i++){
             newArrivingQuote = quotesMockExample[1];
             quotesPage.onQuoteReceived(newArrivingQuote);
             quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(i,'The 100 first itens must be included in history');
         }
 
-        for(let i=1; i <= 100; i++){
+        for(let i=1; i <= 50; i++){
             let lastReceivedItem = angular.copy(quotesPage.quotesList[0].history[0]);
             lastReceivedItem.timestamp ++;
 
             newArrivingQuote = quotesMockExample[1];
             quotesPage.onQuoteReceived(newArrivingQuote);
-            quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(100,'Afeter 100, the last item is always deleted');
+            quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(50,'Afeter 100, the last item is always deleted');
             let timestamps = quotesPage.quotesList[0].history.map((item)=>item.timestamp);
 
             lastReceivedItem.timestamp.should.not.be.oneOf(timestamps,'The older quot shold be deleted');
-            quotesPage.quotesList[0].history[99].timestamp.should.be.equal(newArrivingQuote.timestamp,'The newer timestamp shoul be in the bottom of the list');
+            quotesPage.quotesList[0].history[49].timestamp.should.be.equal(newArrivingQuote.timestamp,'The newer timestamp shoul be in the bottom of the list');
         }
 
     })

@@ -13,8 +13,12 @@ module.exports = function (config) {
       './node_modules/angular-ui-router/release/angular-ui-router.min.js',
       './node_modules/angular-mocks/angular-mocks.js',
       './node_modules/angular-material/angular-material.min.js',
+      './node_modules/chart.js/dist/Chart.min.js',
+      './node_modules/angular-chart.js/dist/angular-chart.min.js',
+
       './node_modules/sinon/pkg/sinon.js',
       './node_modules/moment/min/moment.min.js',
+
       './src/module/app.js',
       './src/services/**',
       './src/components/**',

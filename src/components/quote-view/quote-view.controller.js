@@ -1,5 +1,6 @@
 'use stric'
 
+
 /**
   * @ngdoc component
   * @name quotesModule.component:quoteView
@@ -18,6 +19,9 @@ angular.module('quotesModule').component('quoteView',{
         graphColor:'='
     }
 })
+
+//Holds the promise of $interval, so it can be cancelled
+var intervalPromise;
 
 
 /**
@@ -71,7 +75,7 @@ function quotesViewController($filter,$interval,$mdMedia){
 
   /**
     * @ngdoc method
-    * @name quotesViewController.chartDataset
+    * @name quotesViewController.setupChartDataset
     *
     * @methodOf
     * quotesModule.controller:quotesViewController
@@ -126,17 +130,61 @@ function quotesViewController($filter,$interval,$mdMedia){
   */
   this.quote;
 
+
+
+   /**
+    * @ngdoc method
+    * @name quotesViewController.getSymboUrl
+    *
+    * @methodOf
+    * quotesModule.controller:quotesViewController
+    *
+    * @description
+    * 
+    * Returns the URL to download the symbol, from toroinvestimentos website
+  */
   this.getSymboUrl = function(){
       if(!this.quote || !this.quote.symbol) return '';
       return `https://cdn.toroinvestimentos.com.br/corretora/images/quote/${this.quote.symbol}.svg`;
   }
+
+
+
+  /**
+    * @ngdoc method
+    * @name quotesViewController.$onInit
+    *
+    * @methodOf
+    * quotesModule.controller:quotesViewController
+    *
+    * @description
+    * 
+    * Component initialization. Sets up the dataset and start a task
+    * for updating the chart every 100ms.
+  */
   this.$onInit = function(){
       this.setupChartDataset();
 
       //Updates the graph
-      $interval(()=>{
+      intervalPromise = $interval(()=>{
         this.setupChartDataset();
       },100)
   }  
+
+
+  /**
+    * @ngdoc method
+    * @name quotesViewController.$onDestroy
+    *
+    * @methodOf
+    * quotesModule.controller:quotesViewController
+    *
+    * @description
+    * 
+    * Component Deinitialization. cancel the interval promise
+  */
+  this.$onDestroy = function(){
+    $interval.cancel(intervalPromise);
+  }
 
 }

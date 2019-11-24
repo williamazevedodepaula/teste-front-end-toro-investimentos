@@ -110,6 +110,7 @@ angular.module('quotesModule').factory('QuotesService',[function(){
          * 
          * * name: quote name
          * * value: quote value
+         * * symbol: o nome do símbolo, para ser buscado em um banco de dados
          * * timestamp: quote timestamp
          * * date: quote timestamp converted to data. It was used the following logic:
          * 
