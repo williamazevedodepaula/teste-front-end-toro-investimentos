@@ -55,7 +55,7 @@ http://localhost:9000
 
 ### 4) Execução dos testes unitários
 
-Para executar os testes, executar o seguinte comando, dentro do direório do projeto, enquanto a aplicação estiver executando:
+Para executar os testes, executar o seguinte comando, dentro do direório do projeto, **enquanto a aplicação e o quotesmock estiverem executando**:
 
 <pre>
  npm test
