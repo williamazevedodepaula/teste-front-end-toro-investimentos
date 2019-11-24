@@ -1,0 +1,12 @@
+<md-toolbar>
+    <div class="md-toolbar-tools">
+        <h2 flex md-truncate>Toro Investimentos - Consulta de ações</h2>
+
+        <span class="md-subhead">Quantidade exibida: </span>
+        <md-input-container id="quotes-to-show-container">
+            <md-select ng-model="$ctrl.quotesToShow" id="quotes-to-show">
+                <md-option ng-repeat="amount in [3,5,6,9]" ng-value="amount">{{amount}}</md-option>
+            </md-select>
+        </md-input-container>
+    </div>
+</md-toolbar>
