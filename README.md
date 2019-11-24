@@ -1,7 +1,7 @@
 # teste-front-end-toro-investimentos
 Teste de desenvolvimento FrontEnd para a Toro Investimentos
 
-## Instalação
+## 1) Instalação
 
 Para realizar a instalação da aplicação, os seguintes passos devem ser seguidos:
 
