@@ -28,6 +28,7 @@ function quotesPageController(QuotesService){
   var ctrl = this;
   this.isConnected = false;
   this.quotesList = [];
+  this.quotesToShow = 5;
 
 
   this.onQuoteReceived = function(newQuote){
@@ -51,6 +52,16 @@ function quotesPageController(QuotesService){
     }
   }
 
+  this.getBetterEvaluatedQuotes = function(){
+    return this.quotesList.sort(function(a,b){return b.currentValue - a.currentValue}).slice(0,this.quotesToShow);
+  }
+
+
+  this.getWorstEvaluatedQuotes = function(){
+    let length = this.quotesList.length;
+    return this.quotesList.sort(function(a,b){return b.currentValue - a.currentValue}).slice(length-this.quotesToShow,length);
+  }
+
   
   this.$onInit = async function(){
     tryConnect();
@@ -58,12 +69,13 @@ function quotesPageController(QuotesService){
     async function tryConnect(){
       if(!QuotesService.isConnected()){
         try{
-          await QuotesService.initConnection();
-          QuotesService.onQuoteReceived(ctrl.onQuoteReceived);
+          await QuotesService.initConnection();          
           ctrl.isConnected = true;
         }catch(e){
           setTimeout(tryConnect,500);
+          return;
         }
+        QuotesService.onQuoteReceived(ctrl.onQuoteReceived);
       }
     }
   }

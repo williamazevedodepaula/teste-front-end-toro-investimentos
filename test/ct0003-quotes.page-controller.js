@@ -18,7 +18,7 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
 
     afterEach('Restore all spies',function(){
         spies.forEach((spy)=>{spy.restore});
-        stubs.forEach((spy)=>{spy.restore});
+        stubs.forEach((stub)=>{stub.restore});
     })
 
 
@@ -33,7 +33,7 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
     })
 
     it('Should retry connection every 500 ms', function (done) {
-        let stubs = [
+        stubs = [
             sinon.stub(QuotesService,"initConnection").rejects({})            
         ];
 
@@ -48,7 +48,7 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
     })
 
     it('Should stop trying after connect', async function () {
-        let stubs = [
+        stubs = [
             sinon.stub(QuotesService,"initConnection").rejects({})
         ];
 
@@ -65,17 +65,16 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
 
         quotesPage.should.have.property('isConnected').that.equals(false);
         QuotesService.initConnection.restore();
-        stubs[0] = sinon.stub(QuotesService,"initConnection").resolves();
+        stubs[0] = sinon.stub(QuotesService,"initConnection").resolves({});
+        QuotesService.initConnection.notCalled.should.equal(true);
 
-        await MyTimeout(()=>{
+        await MyTimeout(()=>{            
             quotesPage.should.have.property('isConnected').that.equals(true);
             QuotesService.initConnection.calledOnce.should.equal(true,'500 ms depois, deveria ter havido mais uma conexao, desta vez bem sucedida');
-            QuotesService.initConnection.resetHistory();
-        },600);
+            QuotesService.initConnection.restore();
+        stubs[0] = sinon.stub(QuotesService,"initConnection").resolves();
+        },500);
 
-        await MyTimeout(()=>{
-            QuotesService.initConnection.notCalled.should.equal(true,'Após 500 ms NÃO deveria ter mais uma vez, pois já está conectado');
-        },600);
     })
 
     it('Should receive quotes after init', async function () {
@@ -173,6 +172,69 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
             quotesPage.quotesList[0].history[99].timestamp.should.be.equal(newArrivingQuote.timestamp,'The newer timestamp shoul be in the bottom of the list');
         }
 
+    })
+
+
+    it('Should return the better evaluated quotes',async function(){
+        let quotesPage = $componentController('quotesPage');
+        stubs = [
+            sinon.stub(QuotesService,"initConnection").resolves()
+        ];
+
+        quotesPage.$onInit();
+
+        quotesMockExample.forEach((mock)=>{
+            quotesPage.onQuoteReceived(mock);            
+        });
+
+        quotesPage.quotesToShow = 5;
+        let betterQuotes = quotesPage.getBetterEvaluatedQuotes();
+        expect(betterQuotes).to.exist;
+        betterQuotes.should.have.length(5);
+                                
+        betterQuotes[0].name.should.be.equal('BBDC4');
+        betterQuotes[1].name.should.be.equal('CIEL3');
+        betterQuotes[2].name.should.be.equal('LREN3');
+        betterQuotes[3].name.should.be.equal('UGPA3');
+        betterQuotes[4].name.should.be.equal('MRFG3');
+
+        quotesPage.quotesToShow = 3;
+        betterQuotes = quotesPage.getBetterEvaluatedQuotes();
+        betterQuotes.should.have.length(3);
+        betterQuotes[0].name.should.be.equal('BBDC4');
+        betterQuotes[1].name.should.be.equal('CIEL3');
+        betterQuotes[2].name.should.be.equal('LREN3');
+    })
+
+    it('Should return the worst evaluated quotes',async function(){
+        let quotesPage = $componentController('quotesPage');
+        stubs = [
+            sinon.stub(QuotesService,"initConnection").resolves()
+        ];
+
+        quotesPage.$onInit();
+
+        quotesMockExample.forEach((mock)=>{
+            quotesPage.onQuoteReceived(mock);            
+        });
+
+        quotesPage.quotesToShow = 5;
+        let worstQuotes = quotesPage.getWorstEvaluatedQuotes();
+        expect(worstQuotes).to.exist;
+        worstQuotes.should.have.length(5);
+                                
+        worstQuotes[0].name.should.be.equal('PETR4');
+        worstQuotes[1].name.should.be.equal('CSNA3');
+        worstQuotes[2].name.should.be.equal('MGLU3');
+        worstQuotes[3].name.should.be.equal('RENT3');
+        worstQuotes[4].name.should.be.equal('RADL3');
+
+        quotesPage.quotesToShow = 3;
+        worstQuotes = quotesPage.getWorstEvaluatedQuotes();
+        worstQuotes.should.have.length(3);
+        worstQuotes[0].name.should.be.equal('MGLU3');
+        worstQuotes[1].name.should.be.equal('RENT3');
+        worstQuotes[2].name.should.be.equal('RADL3');
     })
 
 
