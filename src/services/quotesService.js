@@ -111,6 +111,9 @@ angular.module('quotesModule').factory('QuotesService',[function(){
          * * name: quote name
          * * value: quote value
          * * timestamp: quote timestamp
+         * * date: quote timestamp converted to data. It was used the following logic:
+         * 
+         *  date = current timestamp - quote timestamp.
          */
         onQuoteReceived(callback){
             this.getConnection().onmessage = function(event){

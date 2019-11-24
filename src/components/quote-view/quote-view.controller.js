@@ -7,11 +7,12 @@
   * This component displays the information about a single quote
   * 
   * @param {Object=} quote the quote to be displayed
+  * @param {string=} graphColor the color to be used in the graph (as a hex string)
   * 
 */
 angular.module('quotesModule').component('quoteView',{
     templateUrl:'./src/components/quote-view/quote-view.html',
-    controller:['$filter','$interval',quotesViewController],
+    controller:['$filter','$interval','$mdMedia',quotesViewController],
     bindings:{
         quote:'=',
         graphColor:'='
@@ -26,8 +27,12 @@ angular.module('quotesModule').component('quoteView',{
   *
   * @description
   * quoteView component controller
+  * 
+  * @param $filter Angular filter injection service
+  * @param $interval Angular service for registering intervas
+  * @param $mdMedia Angularjs Material service for querying media size
 */
-function quotesViewController($filter,$interval){
+function quotesViewController($filter,$interval,$mdMedia){
   /**
     * @ngdoc property
     * @name quotesViewController.ctrl
@@ -41,9 +46,41 @@ function quotesViewController($filter,$interval){
   */
   var ctrl = this;
 
+
+
+  /**
+    * @ngdoc property
+    * @name quotesViewController.chartDataset
+    *
+    * @propertyOf
+    * quotesModule.controller:quotesViewController
+    *
+    * @description
+    * 
+    * Dataset to be passed to the chart  canvas so the data can be displayed.
+    * It contains the following properties:
+    * 
+    * * data: The quote history values, to be plotted
+    * * labels: The quotes timezone (not displayed)
+    * * colors: The color of the graph
+    * * options: Chart.js options
+  */
   this.chartDataset = undefined;
 
-  this.setupChartDataset = function(animate){
+
+
+  /**
+    * @ngdoc method
+    * @name quotesViewController.chartDataset
+    *
+    * @methodOf
+    * quotesModule.controller:quotesViewController
+    *
+    * @description
+    * 
+    * Setups the charDataset
+  */
+  this.setupChartDataset = function(){
     if((!this.quote)||(!this.quote.history)||(this.quote.history.length == 0)) return;
 
     ctrl.chartDataset = {
@@ -51,16 +88,20 @@ function quotesViewController($filter,$interval){
         labels:this.quote.history.map((quoteItem)=>moment(quoteItem.dateTime).format('HH:mm:ss')),
         colors:[ctrl.graphColor],
         options:{
-            animation: animate||false,
+            //Does not animate, because the data changes with highe frequency
+            animation: false,
             scaleShowLabels : false,
             scales: {
                 xAxes: [{
                     ticks: {
+                        //Hide the labels, because the timestamps are very close
                         display: false
                     }
                 }],
                 yAxes: [{
                     ticks: {
+                        display:!$mdMedia('xs'),
+                        //Format as currency
                         callback: function(label, index, labels) {
                             return $filter('currency')(Number(label),'R$')
                         }
@@ -90,11 +131,12 @@ function quotesViewController($filter,$interval){
       return `https://cdn.toroinvestimentos.com.br/corretora/images/quote/${this.quote.symbol}.svg`;
   }
   this.$onInit = function(){
-      this.setupChartDataset(true);
+      this.setupChartDataset();
 
+      //Updates the graph
       $interval(()=>{
         this.setupChartDataset();
-      },500)
+      },100)
   }  
 
 }

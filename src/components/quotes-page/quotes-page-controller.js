@@ -7,10 +7,13 @@
   * 
   * This component presents the application main screen, where
   * the quotes are displayed
+  * 
+  * @param QuotesService the quote listation service
+  * @param $interval Angular service for registering intervas
 */
 angular.module('quotesModule').component('quotesPage', {
   templateUrl: './src/components/quotes-page/quotes-page.html',
-  controller: ['QuotesService', '$scope', '$interval', '$timeout', quotesPageController],
+  controller: ['QuotesService', '$interval', quotesPageController],
   bindings: {
 
   }
@@ -25,7 +28,7 @@ angular.module('quotesModule').component('quotesPage', {
   * @description
   * The controller quotesPage component
 */
-function quotesPageController(QuotesService, $scope, $interval, $timeout) {
+function quotesPageController(QuotesService, $interval) {
   /**
     * @ngdoc property
     * @name quotesPageController.ctrl
@@ -116,7 +119,7 @@ function quotesPageController(QuotesService, $scope, $interval, $timeout) {
     found.currentValue = newQuote.value;
     found.history.push(newQuote);
 
-    if (found.history.length > 100) {
+    if (found.history.length > 50) {
       found.history = found.history.slice(1, found.history.length);
     }
   }
@@ -207,10 +210,6 @@ function quotesPageController(QuotesService, $scope, $interval, $timeout) {
     $interval(() => {
       tryConnect();
     }, 500);
-
-    /*$interval(function(){ 
-      $scope.$applyAsync();
-     }, 3000);*/
 
 
     async function tryConnect() {

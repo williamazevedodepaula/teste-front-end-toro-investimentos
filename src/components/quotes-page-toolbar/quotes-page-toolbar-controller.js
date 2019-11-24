@@ -26,7 +26,7 @@ angular.module('quotesModule').component('quotesPageToolbar',{
   * @description
   * quotesPageToolbar component controller
 */
-function quotesPageToolbarController($filter,$interval){
+function quotesPageToolbarController(){
   /**
     * @ngdoc property
     * @name quotesPageToolbarController.ctrl
