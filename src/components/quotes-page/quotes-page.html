@@ -1,16 +1,36 @@
 <div ng-cloak>
     <md-container>
+        <md-toolbar>
+            <div class="md-toolbar-tools">
+                <h2 flex md-truncate>Toro Investimentos - Consulta de ações</h2>
+
+                <span class="md-subhead">Quantidade exibida: </span>
+                <md-input-container id="quotes-to-show-container" >
+                    <md-select ng-model="$ctrl.quotesToShow" id="quotes-to-show">
+                        <md-option ng-repeat="amount in [3,5,6,9]" ng-value="amount">{{amount}}</md-option>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </md-toolbar>
+
         <md-tabs class="md-primary" md-dynamic-height>
             <md-tab label="Mais Valorizadas">
                 <md-content layout="row" layout-wrap>
-                    <quote-view ng-repeat="quote in $ctrl.getBetterEvaluatedQuotes()" graph-color="'#84ba5b'" flex-xs flex-gt-xs="50" layout="column"  quote="quote"></quote-view>
+                    <quote-view ng-repeat="quote in $ctrl.getBetterEvaluatedQuotes()" graph-color="'#84ba5b'" flex-xs
+                        flex-gt-xs="33" layout="column" quote="quote"></quote-view>
                 </md-content>
             </md-tab>
             <md-tab label="Menos Valorizadas">
                 <md-content layout="row" layout-wrap>
-                    <quote-view ng-repeat="quote in $ctrl.getWorstEvaluatedQuotes()"  graph-color="'#d35e60'" flex-xs flex-gt-xs="50" layout="column"  quote="quote"></quote-view>
+                    <quote-view ng-repeat="quote in $ctrl.getWorstEvaluatedQuotes()" graph-color="'#d35e60'" flex-xs
+                        flex-gt-xs="33" layout="column" quote="quote"></quote-view>
                 </md-content>
             </md-tab>
         </md-tabs>
     </md-container>
 </div>
+<style>
+    quotes-page #quotes-to-show{
+        text-align: right;
+    }
+</style>

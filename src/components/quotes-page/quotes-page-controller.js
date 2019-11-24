@@ -75,7 +75,7 @@ function quotesPageController(QuotesService, $scope, $interval, $timeout) {
     * @see quotesPageController.getBetterEvaluatedQuotes
     * @see quotesPageController.getWorstEvaluatedQuotes
   */
-  this.quotesToShow = 5;
+  this.quotesToShow = 6;
 
 
 
