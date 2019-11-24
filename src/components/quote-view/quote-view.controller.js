@@ -11,7 +11,7 @@
 */
 angular.module('quotesModule').component('quoteView',{
     templateUrl:'./src/components/quote-view/quote-view.html',
-    controller:['QuotesService','$interval',quotesViewController],
+    controller:['$filter','$interval',quotesViewController],
     bindings:{
         quote:'=',
         graphColor:'='
@@ -27,7 +27,7 @@ angular.module('quotesModule').component('quoteView',{
   * @description
   * quoteView component controller
 */
-function quotesViewController(QuotesService,$interval){
+function quotesViewController($filter,$interval){
   /**
     * @ngdoc property
     * @name quotesViewController.ctrl
@@ -44,17 +44,31 @@ function quotesViewController(QuotesService,$interval){
   this.chartDataset = undefined;
 
   this.setupChartDataset = function(animate){
-    if((!this.quote)||(!this.quote.history)) return;
+    if((!this.quote)||(!this.quote.history)||(this.quote.history.length == 0)) return;
 
-    let dataset = {
+    ctrl.chartDataset = {
         data:this.quote.history.map((quoteItem)=>quoteItem.value),
-        labels:this.quote.history.map((quoteItem)=>moment(quoteItem.dateTime).format('HH:MM:SS')),
+        labels:this.quote.history.map((quoteItem)=>moment(quoteItem.dateTime).format('HH:mm:ss')),
         colors:[ctrl.graphColor],
         options:{
-            animation: animate||false
+            animation: animate||false,
+            scaleShowLabels : false,
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        display: false
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        callback: function(label, index, labels) {
+                            return $filter('currency')(Number(label),'R$')
+                        }
+                    }
+                }]
+            }
         }
     }    
-    ctrl.chartDataset = dataset;
   }
 
 
