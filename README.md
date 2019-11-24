@@ -1,22 +1,34 @@
 # teste-front-end-toro-investimentos
 Teste de desenvolvimento FrontEnd para a Toro Investimentos
 
-## Inicialização
+## Instalação
 
-Para realizar a instalação da aplicação, os seguintes passos devem ser seguidos.
+Para realizar a instalação da aplicação, os seguintes passos devem ser seguidos:
 
-IMPORTANTE: O passo 1 é necessário apenas na primeira vez em que for acessar.
+* Clonar o repositório
 
-### 1) Realizar o build da imagem do docker:
+* Realizar o build da imagem do docker. Para isso, dentro do diretório raiz do projeto, executar o comando:
 
-Dentro do diretório raiz do projeto, executar o comando:
 <pre>
  docker-compose -f docker-compose.yml build --no-cache quotes
 </pre>
 
-### 2) Iniciar o container
 
-Dentro do diretório raiz do projeto, executar o comando:
+## 2) Inicialização da aplicação
+
+IMPORTANTE: Antes de inicializar a aplicação, certifique-se dos seguintes pontos:
+
+* de que o serviço "quotesmock" NÃO esteja rodando,
+pois o mesmo será inicializado automaticamente através do docker compose.
+
+* Certifique-se de que as portas 8080 e 9000 não estejam alocadas.
+
+* De não executar o comando "npm install", pois as dependências serão instaladas automaticamente.
+
+* Deve haver permissão de escrita no diretório.
+
+
+Para inicializar a aplicação, dentro do diretório raiz do projeto, executar o comando:
 
 <pre>
  docker-compose -f docker-compose.yml up -d
@@ -29,18 +41,17 @@ Conferir o log, utilizando o comando:
 </pre>
 
 Importante: Na primeira vez, a execução irá demorar um pouco mais, pois o comando de inicialização irá executar automaticamente
-o "npm install", para instalar as dependências. 
-
-É importante haver permissão de escrita no diretório.
+o "npm install", para instalar as dependências.
 
 
-### 3) Acessar a aplicação
+
+
+#### Acessar a aplicação
 
 Após aproximadamente 1 min, a aplicação estará disponível no endereço:
 
 http://localhost:9000
 
-A aplicação começará a exibir as ações assim que o servidor "quotesmock" for iniciado. A aplicação se conectará automaticamente.
 
 ### 4) Execução dos testes unitários
 

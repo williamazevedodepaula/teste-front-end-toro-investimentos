@@ -10,3 +10,7 @@ services:
       - SERVER_ADDRESS=0.0.0.0:8080/quotes
     volumes:
       - ./:/usr/local/apache2/htdocs
+  quotesmock:
+    image: toroinvestimentos/quotesmock
+    ports:
+      - "8080:8080"
