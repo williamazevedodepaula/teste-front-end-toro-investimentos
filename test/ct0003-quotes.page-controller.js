@@ -65,16 +65,18 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
 
         quotesPage.should.have.property('isConnected').that.equals(false);
         QuotesService.initConnection.restore();
-        stubs[0] = sinon.stub(QuotesService,"initConnection").resolves({});
+        stubs[0] = sinon.stub(QuotesService,"initConnection").resolves();
         QuotesService.initConnection.notCalled.should.equal(true);
 
         await MyTimeout(()=>{            
             quotesPage.should.have.property('isConnected').that.equals(true);
             QuotesService.initConnection.calledOnce.should.equal(true,'500 ms depois, deveria ter havido mais uma conexao, desta vez bem sucedida');
-            QuotesService.initConnection.restore();
-        stubs[0] = sinon.stub(QuotesService,"initConnection").resolves();
+            QuotesService.initConnection.resetHistory();
         },500);
 
+        await MyTimeout(()=>{
+            QuotesService.initConnection.notCalled.should.equal(true,'Após 500 ms NÃO deveria ter mais uma vez, pois já está conectado');
+        },600);
     })
 
     it('Should receive quotes after init', async function () {
