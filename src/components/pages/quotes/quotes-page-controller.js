@@ -1,3 +1,4 @@
+'use stric'
 
 /**
   * @ngdoc component
@@ -26,25 +27,28 @@ angular.module('quotesModule').component('quotesPage',{
 function quotesPageController(QuotesService){
   var ctrl = this;
   this.isConnected = false;
-  this.quoteList = [];
+  this.quotesList = [];
 
 
   this.onQuoteReceived = function(newQuote){
-    let found = this.quoteList.find((quote)=>{
+    let found = ctrl.quotesList.find((quote)=>{
       return quote.name == newQuote.name;
     });
 
-    if(!foud){
+    if(!found){
       found = {   
         name:newQuote.name,     
         history: []
       }
-      this.quoteList.push(found);
+      ctrl.quotesList.push(found);
     }
 
-    found.currentValue = newQuote.currentValue;
-
+    found.currentValue = newQuote.value;
     found.history.push(newQuote);
+
+    if(found.history.length > 100){
+      found.history = found.history.slice(1,found.history.length);
+    }
   }
 
   

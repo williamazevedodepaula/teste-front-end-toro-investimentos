@@ -6,6 +6,7 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
     var $componentController;
     var QuotesService;
     var spies = [];
+    var stubs = [];
 
     beforeEach('Load the module', function () {
         angular.mock.module("quotesModule");
@@ -17,6 +18,7 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
 
     afterEach('Restore all spies',function(){
         spies.forEach((spy)=>{spy.restore});
+        stubs.forEach((spy)=>{spy.restore});
     })
 
 
@@ -90,58 +92,88 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
         },600)
     })
 
-    it('Should keep track of the quoteList, keeping history', async function () {
+    it('Should keep track of the quotesList, keeping history', async function () {
         let quotesPage = $componentController('quotesPage');
         let newArrivingQuote;
-        let stubs = [
+        stubs = [
             sinon.stub(QuotesService,"initConnection").resolves()
         ];
         
-        quotesPage.should.have.property("quoteList").that.is.an("array").with.length(0,'The quotes list starts empty');
+        quotesPage.should.have.property("quotesList").that.is.an("array").with.length(0,'The quotes list starts empty');
         quotesPage.$onInit();
 
-        //A new quote arrived. Creates a antry for it in the quoteList and add it to the history
+        //A new quote arrived. Creates a antry for it in the quotesList and add it to the history
         newArrivingQuote = quotesMockExample[0];
         quotesPage.onQuoteReceived(newArrivingQuote);
-        quotesPage.should.have.property("quoteList").that.is.an("array").with.length(1,`A new item must have been created in the list for the received quote`);
+        quotesPage.should.have.property("quotesList").that.is.an("array").with.length(1,`A new item must have been created in the list for the received quote`);
         quotesPage.quotesList[0].should.have.property("name").that.equals(newArrivingQuote.name);
         quotesPage.quotesList[0].should.have.property("currentValue").that.equals(newArrivingQuote.value);
         quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(1,'the item must be in the history of the quote');
         quotesPage.quotesList[0].history[0].should.have.property('value').that.equals(newArrivingQuote.value);
         quotesPage.quotesList[0].history[0].should.have.property('timestamp').that.equals(newArrivingQuote.timestamp);
 
-        //A new quote arrived. Creates a antry for it in the quoteList and add it to the history
+        //A new quote arrived. Creates a antry for it in the quotesList and add it to the history
         newArrivingQuote = quotesMockExample[1];
         quotesPage.onQuoteReceived(newArrivingQuote);
-        quotesPage.should.have.property("quoteList").that.is.an("array").with.length(2,`A new item must have been created in the list for the received quote (2)`);
+        quotesPage.should.have.property("quotesList").that.is.an("array").with.length(2,`A new item must have been created in the list for the received quote (2)`);
         quotesPage.quotesList[1].should.have.property("name").that.equals(newArrivingQuote.name);
         quotesPage.quotesList[1].should.have.property("currentValue").that.equals(newArrivingQuote.value);
         quotesPage.quotesList[1].should.have.property("history").that.is.an("array").with.length(1,'the item must be in the history of the quote (2)');
         quotesPage.quotesList[1].history[0].should.have.property('value').that.equals(newArrivingQuote.value);
-        quotesPage.quotesList[1].history[0].should.have.property('timestamp').that.equals(newArrivingQuote.timestamp);
-
-        newArrivingQuote = angular.copy(quotesMockExample[0]);
-        newArrivingQuote.value += 0.8;
+        quotesPage.quotesList[1].history[0].should.have.property('timestamp').that.equals(newArrivingQuote.timestamp);        
 
         //A new quote arrived, but it is already registered. Add it to the referred quote history
+        newArrivingQuote = angular.copy(quotesMockExample[0]);
+        newArrivingQuote.value += 0.8;
         quotesPage.onQuoteReceived(newArrivingQuote);
-        quotesPage.should.have.property("quoteList").that.is.an("array").with.length(2,`The received item already exists on the list, should not create another entry`);
+        quotesPage.should.have.property("quotesList").that.is.an("array").with.length(2,`The received item already exists on the list, should not create another entry`);
         quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(2,'The new item mus be added to the history of the existing one');
         quotesPage.quotesList[0].should.have.property("currentValue").that.equals(newArrivingQuote.value,`The new quote received becomes the new currentValue`);
 
         //A new quote arrived, but it is already registered. Add it to the referred quote history
         newArrivingQuote.value += 0.6;
         quotesPage.onQuoteReceived(newArrivingQuote);
-        quotesPage.should.have.property("quoteList").that.is.an("array").with.length(2,`The received item already exists on the list, should not create another entry`);
+        quotesPage.should.have.property("quotesList").that.is.an("array").with.length(2,`The received item already exists on the list, should not create another entry`);
         quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(3,'The new item mus be added to the history of the existing one (2)');
         quotesPage.quotesList[0].should.have.property("currentValue").that.equals(newArrivingQuote.value,`The new quote received becomes the new currentValue (2)`);
 
         //A new quote arrived, but it is already registered. Add it to the referred quote history
         newArrivingQuote = angular.copy(quotesMockExample[1]);
         newArrivingQuote.value += 0.9;
+        quotesPage.onQuoteReceived(newArrivingQuote);
         quotesPage.quotesList[1].should.have.property("history").that.is.an("array").with.length(2,'The new item mus be added to the history of the existing one (3)');
         quotesPage.quotesList[1].should.have.property("currentValue").that.equals(newArrivingQuote.value,`The new quote received becomes the new currentValue (3)`);
     });
+
+    it('Should keep only 100 itens in history', async function () {
+        let quotesPage = $componentController('quotesPage');
+        let newArrivingQuote;
+        stubs = [
+            sinon.stub(QuotesService,"initConnection").resolves()
+        ];
+
+        quotesPage.$onInit();
+
+        for(let i=1; i <= 100; i++){
+            newArrivingQuote = quotesMockExample[1];
+            quotesPage.onQuoteReceived(newArrivingQuote);
+            quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(i,'The 100 first itens must be included in history');
+        }
+
+        for(let i=1; i <= 100; i++){
+            let lastReceivedItem = angular.copy(quotesPage.quotesList[0].history[0]);
+            lastReceivedItem.timestamp ++;
+
+            newArrivingQuote = quotesMockExample[1];
+            quotesPage.onQuoteReceived(newArrivingQuote);
+            quotesPage.quotesList[0].should.have.property("history").that.is.an("array").with.length(100,'Afeter 100, the last item is always deleted');
+            let timestamps = quotesPage.quotesList[0].history.map((item)=>item.timestamp);
+
+            lastReceivedItem.timestamp.should.not.be.oneOf(timestamps,'The older quot shold be deleted');
+            quotesPage.quotesList[0].history[99].timestamp.should.be.equal(newArrivingQuote.timestamp,'The newer timestamp shoul be in the bottom of the list');
+        }
+
+    })
 
 
     async function MyTimeout(callback,time){
