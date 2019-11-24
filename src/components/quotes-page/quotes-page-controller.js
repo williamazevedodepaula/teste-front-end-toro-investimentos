@@ -4,12 +4,13 @@
   * @ngdoc component
   * @name quotesModule.component:quotesPage
   * @description
-  * Componente referente à tela de listagem de cotações
   * 
+  * This component presents the application main screen, where
+  * the quotes are displayed
 */
 angular.module('quotesModule').component('quotesPage',{
     templateUrl:'./src/components/quotes-page/quotes-page.html',
-    controller:['QuotesService',quotesPageController],
+    controller:['QuotesService','$scope','$interval','$timeout',quotesPageController],
     bindings:{
         
     }
@@ -22,9 +23,9 @@ angular.module('quotesModule').component('quotesPage',{
   * @name quotesModule.controller:quotesPageController
   *
   * @description
-  * Controlador do componente quotesPage
+  * The controller quotesPage component
 */
-function quotesPageController(QuotesService){
+function quotesPageController(QuotesService,$scope,$interval,$timeout){
   /**
     * @ngdoc property
     * @name quotesPageController.ctrl
@@ -153,9 +154,11 @@ function quotesPageController(QuotesService){
     * @returns {Array.Object} a subset of quotesList, presententing the top N better quotes
   */
   this.getBetterEvaluatedQuotes = function(){
-    return this.quotesList.sort(function(a,b){return b.currentValue - a.currentValue}).slice(0,this.quotesToShow);
+    return ctrl.quotesList.sort(function(a,b){return b.currentValue - a.currentValue}).slice(0,ctrl.quotesToShow);
   }
 
+
+  this.betterEvaluatedQuotes = [];
 
 
   /**
@@ -175,11 +178,11 @@ function quotesPageController(QuotesService){
     * @returns {Array.Object} a subset of quotesList, presententing the top N worst value quotes
   */
   this.getWorstEvaluatedQuotes = function(){
-    let length = this.quotesList.length;
-    return this.quotesList.sort(function(a,b){return b.currentValue - a.currentValue}).slice(length-this.quotesToShow,length);
+    let length = ctrl.quotesList.length;
+    return ctrl.quotesList.sort(function(a,b){return b.currentValue - a.currentValue}).slice(length-ctrl.quotesToShow,length);
   }
 
-
+  this.worstEvaluatedQuotes = [];
   
   /**
     * @ngdoc method
@@ -198,6 +201,9 @@ function quotesPageController(QuotesService){
   */
   this.$onInit = async function(){
     tryConnect();
+    $interval(function(){ 
+      $scope.$applyAsync();
+     }, 3000);     
 
     async function tryConnect(){
       if(!QuotesService.isConnected()){
@@ -205,7 +211,7 @@ function quotesPageController(QuotesService){
           await QuotesService.initConnection();          
           ctrl.isConnected = true;
         }catch(e){
-          setTimeout(tryConnect,500);
+          $timeout(tryConnect,500);
           return;
         }
         QuotesService.onQuoteReceived(ctrl.onQuoteReceived);
