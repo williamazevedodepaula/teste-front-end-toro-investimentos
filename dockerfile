@@ -21,9 +21,6 @@ ENV HTDOCS_PATH=/usr/local/apache2/htdocs
 
 ADD ./ ${HTDOCS_PATH}/
 
-# executa o npm install
-
-RUN cd ${HTDOCS_PATH} && npm install
 
 #configura o entrypoint
 
