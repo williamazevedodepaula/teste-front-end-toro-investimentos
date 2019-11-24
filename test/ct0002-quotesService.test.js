@@ -52,19 +52,19 @@ describe('CT0002 - Tests about QuotesService: ',function(){
     })
 
     it('Should convert data received from server to an object',function(done){        
-        try{
-            let fakeSocket = {};
-            let stubs = [
-                sinon.stub(QuotesService,"initConnection").resolves(),
-                sinon.stub(QuotesService,"getConnection").returns(fakeSocket)
-            ];
-
+        let fakeSocket = {};
+        let stubs = [
+            sinon.stub(QuotesService,"initConnection").resolves(),
+            sinon.stub(QuotesService,"getConnection").returns(fakeSocket)
+        ];
+        try{        
             let count = 0;
             QuotesService.onQuoteReceived(function(quote){
                 expect(quote).to.be.an('object');
                 expect(quote).to.have.property("name").that.equals('ABEV3');
                 expect(quote).to.have.property("value").that.equals(208.84);
                 expect(quote).to.have.property("timestamp").that.equals(1574534260.107485);
+                expect(quote).to.have.property("symbol").that.equals("ABEV");
                 count++;
 
                 if(count == 3) done();

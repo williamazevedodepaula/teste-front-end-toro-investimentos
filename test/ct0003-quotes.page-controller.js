@@ -5,14 +5,18 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
 
     var $componentController;
     var QuotesService;
+    var $timeout;
+    var $interval;
     var spies = [];
     var stubs = [];
 
     beforeEach('Load the module', function () {
         angular.mock.module("quotesModule");
-        angular.mock.inject(function (_$componentController_, _QuotesService_) {
+        angular.mock.inject(function (_$componentController_, _QuotesService_,_$interval_,_$timeout_) {
             $componentController = _$componentController_;
             QuotesService = _QuotesService_;
+            $timeout = _$timeout_;
+            $interval = _$interval_;
         })
     })
 
@@ -32,51 +36,52 @@ describe('CT0003 - Tests about QuotesPageController: ', function () {
         assert(QuotesService.initConnection.calledOnce);
     })
 
-    it('Should retry connection every 500 ms', function (done) {
+    it('Should retry connection every 500 ms', async function () {
         stubs = [
             sinon.stub(QuotesService,"initConnection").rejects({})            
         ];
 
         let quotesPage = $componentController('quotesPage');                
         
-        quotesPage.$onInit();
-
-        setTimeout(()=>{
-            QuotesService.initConnection.calledThrice.should.equal(true)
-            done();
-        },1500)        
+        await quotesPage.$onInit();
+        QuotesService.initConnection.calledOnce.should.equal(true);
+        $interval.flush(500);
+        QuotesService.initConnection.calledTwice.should.equal(true);
+        $interval.flush(500);
+        QuotesService.initConnection.calledThrice.should.equal(true);
     })
 
     it('Should stop trying after connect', async function () {
+        //Mocks fail attempt to connect to server
         stubs = [
-            sinon.stub(QuotesService,"initConnection").rejects({})
+            sinon.stub(QuotesService,"initConnection").rejects({}),
+            sinon.stub(QuotesService,"isConnected").returns(false)
         ];
 
         let quotesPage = $componentController('quotesPage');
-        quotesPage.should.have.property('isConnected').that.equals(false);
         
-        quotesPage.$onInit();
-
+        await quotesPage.$onInit();
         QuotesService.initConnection.calledOnce.should.equal(true);
 
-        await MyTimeout(()=>{
-            QuotesService.initConnection.calledTwice.should.equal(true,'Após 500 ms deveria ter tentado uma segunda vez');
-        },600);
+        $interval.flush(500);
+        QuotesService.initConnection.calledTwice.should.equal(true,'Após 500 ms deveria ter tentado uma segunda vez');
 
-        quotesPage.should.have.property('isConnected').that.equals(false);
         QuotesService.initConnection.restore();
-        stubs[0] = sinon.stub(QuotesService,"initConnection").resolves();
+        
+        //Mocks a stablished connection agains server
+        stubs[0] = sinon.stub(QuotesService,"initConnection").callsFake(async()=>{
+            QuotesService.isConnected.restore();
+            stubs[1] = sinon.stub(QuotesService,"isConnected").returns(true);
+        });        
+        
         QuotesService.initConnection.notCalled.should.equal(true);
 
-        await MyTimeout(()=>{            
-            quotesPage.should.have.property('isConnected').that.equals(true);
-            QuotesService.initConnection.calledOnce.should.equal(true,'500 ms depois, deveria ter havido mais uma conexao, desta vez bem sucedida');
-            QuotesService.initConnection.resetHistory();
-        },500);
+        await $interval.flush(500);
+        QuotesService.initConnection.calledOnce.should.equal(true,'500 ms depois, deveria ter havido mais uma conexao, desta vez bem sucedida');
+        QuotesService.initConnection.resetHistory();
 
-        await MyTimeout(()=>{
-            QuotesService.initConnection.notCalled.should.equal(true,'Após 500 ms NÃO deveria ter mais uma vez, pois já está conectado');
-        },600);
+        $interval.flush(500);
+        QuotesService.initConnection.notCalled.should.equal(true,'Após 500 ms NÃO deveria ter mais uma vez, pois já está conectado');
     })
 
     it('Should receive quotes after init', async function () {

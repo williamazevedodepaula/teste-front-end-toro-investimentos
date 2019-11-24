@@ -8,12 +8,12 @@
   * This component presents the application main screen, where
   * the quotes are displayed
 */
-angular.module('quotesModule').component('quotesPage',{
-    templateUrl:'./src/components/quotes-page/quotes-page.html',
-    controller:['QuotesService','$scope','$interval','$timeout',quotesPageController],
-    bindings:{
-        
-    }
+angular.module('quotesModule').component('quotesPage', {
+  templateUrl: './src/components/quotes-page/quotes-page.html',
+  controller: ['QuotesService', '$scope', '$interval', '$timeout', quotesPageController],
+  bindings: {
+
+  }
 })
 
 
@@ -25,7 +25,7 @@ angular.module('quotesModule').component('quotesPage',{
   * @description
   * The controller quotesPage component
 */
-function quotesPageController(QuotesService,$scope,$interval,$timeout){
+function quotesPageController(QuotesService, $scope, $interval, $timeout) {
   /**
     * @ngdoc property
     * @name quotesPageController.ctrl
@@ -38,21 +38,6 @@ function quotesPageController(QuotesService,$scope,$interval,$timeout){
     * Reference to the controler's this and component scope
   */
   var ctrl = this;
-
-
-  
-  /**
-    * @ngdoc property
-    * @name quotesPageController.isConnected
-    *
-    * @propertyOf
-    * quotesModule.controller:quotesPageController
-    *
-    * @description
-    * 
-    * Tells if the screen is already connected to the server (true if connected, false otherwise)
-  */
-  this.isConnected = false;
 
 
 
@@ -114,14 +99,14 @@ function quotesPageController(QuotesService,$scope,$interval,$timeout){
     * 
     * @param {Object} newQuote the received new quote
   */
-  this.onQuoteReceived = function(newQuote){
-    let found = ctrl.quotesList.find((quote)=>{
+  this.onQuoteReceived = function (newQuote) {
+    let found = ctrl.quotesList.find((quote) => {
       return quote.name == newQuote.name;
     });
 
-    if(!found){
-      found = {   
-        name:newQuote.name,     
+    if (!found) {
+      found = {
+        name: newQuote.name,
         history: []
       }
       ctrl.quotesList.push(found);
@@ -130,8 +115,8 @@ function quotesPageController(QuotesService,$scope,$interval,$timeout){
     found.currentValue = newQuote.value;
     found.history.push(newQuote);
 
-    if(found.history.length > 100){
-      found.history = found.history.slice(1,found.history.length);
+    if (found.history.length > 100) {
+      found.history = found.history.slice(1, found.history.length);
     }
   }
 
@@ -153,12 +138,10 @@ function quotesPageController(QuotesService,$scope,$interval,$timeout){
     * @see quotesPageController.quotesToShow
     * @returns {Array.Object} a subset of quotesList, presententing the top N better quotes
   */
-  this.getBetterEvaluatedQuotes = function(){
-    return ctrl.quotesList.sort(function(a,b){return b.currentValue - a.currentValue}).slice(0,ctrl.quotesToShow);
+  this.getBetterEvaluatedQuotes = function () {
+    return ctrl.quotesList.sort(function (a, b) { return b.currentValue - a.currentValue }).slice(0, ctrl.quotesToShow);
   }
 
-
-  this.betterEvaluatedQuotes = [];
 
 
   /**
@@ -177,13 +160,32 @@ function quotesPageController(QuotesService,$scope,$interval,$timeout){
     * @see quotesPageController.quotesToShow
     * @returns {Array.Object} a subset of quotesList, presententing the top N worst value quotes
   */
-  this.getWorstEvaluatedQuotes = function(){
+  this.getWorstEvaluatedQuotes = function () {
     let length = ctrl.quotesList.length;
-    return ctrl.quotesList.sort(function(a,b){return b.currentValue - a.currentValue}).slice(length-ctrl.quotesToShow,length);
+    return ctrl.quotesList.sort(function (a, b) { return b.currentValue - a.currentValue }).slice(length - ctrl.quotesToShow, length);
   }
 
-  this.worstEvaluatedQuotes = [];
-  
+
+
+  /**
+    * @ngdoc method
+    * @name quotesPageController#isConnected
+    *
+    * @methodOf
+    * quotesModule.controller:quotesPageController
+    *
+    * @description
+    * 
+    * Tells if the screen is already connected to the server (true if connected, false otherwise)
+    * 
+    * @returns {boolean} true, if it is connected. False, otherwise
+  */
+  this.isConnected = function () {
+    return QuotesService.isConnected()
+  }
+
+
+
   /**
     * @ngdoc method
     * @name quotesPageController#$onInit
@@ -199,22 +201,23 @@ function quotesPageController(QuotesService,$scope,$interval,$timeout){
     * 
     * @see quotesPageController.quotesToShow
   */
-  this.$onInit = async function(){
-    tryConnect();
-    $interval(function(){ 
-      $scope.$applyAsync();
-     }, 3000);     
+  this.$onInit = async function () {
+    await tryConnect();
+    $interval(() => {
+      tryConnect();
+    }, 500);
 
-    async function tryConnect(){
-      if(!QuotesService.isConnected()){
-        try{
-          await QuotesService.initConnection();          
-          ctrl.isConnected = true;
-        }catch(e){
-          $timeout(tryConnect,500);
-          return;
-        }
-        QuotesService.onQuoteReceived(ctrl.onQuoteReceived);
+    /*$interval(function(){ 
+      $scope.$applyAsync();
+     }, 3000);*/
+
+
+    async function tryConnect() {
+      if (!ctrl.isConnected()) {
+        try {
+          await QuotesService.initConnection();
+          QuotesService.onQuoteReceived(ctrl.onQuoteReceived);
+        } catch (e) { }
       }
     }
   }

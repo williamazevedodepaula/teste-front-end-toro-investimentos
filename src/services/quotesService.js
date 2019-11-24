@@ -35,7 +35,9 @@ angular.module('quotesModule').factory('QuotesService',[function(){
          *
          * @returns {Object} A Promise that will resolve if the connection is performed successfully, or reject, if it fails.
          */
-        initConnection:function(){             
+        initConnection:function(){    
+            connected = false;
+            this.connection = undefined;         
             return new Promise((resolve,reject)=>{     
                 this.connection = new WebSocket(this.url);
                 
@@ -120,7 +122,8 @@ angular.module('quotesModule').factory('QuotesService',[function(){
                 let result = {
                     name:name,
                     value:_result[name],
-                    timestamp:_result.timestamp
+                    timestamp:_result.timestamp,
+                    symbol:name.slice(0,name.length -1)
                 }
 
                 callback(result);
