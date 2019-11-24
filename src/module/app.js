@@ -14,7 +14,7 @@
   *  </pre>
   * 
 */
-let quotesApp = angular.module("quotesModule",['ui.router','ngMaterial']);
+let quotesApp = angular.module("quotesModule",['ui.router','ngMaterial','chart.js']);
 
 
 quotesApp.config(['$stateProvider', '$urlRouterProvider',function($stateProvider, $urlRouterProvider){

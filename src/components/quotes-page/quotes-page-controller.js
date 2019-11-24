@@ -119,8 +119,6 @@ function quotesPageController(QuotesService, $scope, $interval, $timeout) {
     if (found.history.length > 100) {
       found.history = found.history.slice(1, found.history.length);
     }
-
-    console.log($ctrl.quotesList);
   }
 
 

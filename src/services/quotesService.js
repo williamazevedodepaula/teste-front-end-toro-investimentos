@@ -1,5 +1,3 @@
-
-
 /**
   * @ngdoc service
   * @name quotesModule.QuotesService
@@ -123,6 +121,7 @@ angular.module('quotesModule').factory('QuotesService',[function(){
                     name:name,
                     value:_result[name],
                     timestamp:_result.timestamp,
+                    dateTime:new Date((new Date()).getTime() - _result.timestamp),
                     symbol:name.slice(0,name.length -1)
                 }
 

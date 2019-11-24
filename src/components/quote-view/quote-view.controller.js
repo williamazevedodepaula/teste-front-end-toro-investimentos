@@ -11,9 +11,10 @@
 */
 angular.module('quotesModule').component('quoteView',{
     templateUrl:'./src/components/quote-view/quote-view.html',
-    controller:['QuotesService','$scope',quotesViewController],
+    controller:['QuotesService','$interval',quotesViewController],
     bindings:{
-        quote:'='
+        quote:'=',
+        graphColor:'='
     }
 })
 
@@ -26,7 +27,7 @@ angular.module('quotesModule').component('quoteView',{
   * @description
   * quoteView component controller
 */
-function quotesViewController(QuotesService,$scope){
+function quotesViewController(QuotesService,$interval){
   /**
     * @ngdoc property
     * @name quotesViewController.ctrl
@@ -39,6 +40,22 @@ function quotesViewController(QuotesService,$scope){
     * Reference to the controler's 'this' and component scope
   */
   var ctrl = this;
+
+  this.chartDataset = undefined;
+
+  this.setupChartDataset = function(animate){
+    if((!this.quote)||(!this.quote.history)) return;
+
+    let dataset = {
+        data:this.quote.history.map((quoteItem)=>quoteItem.value),
+        labels:this.quote.history.map((quoteItem)=>moment(quoteItem.dateTime).format('HH:MM:SS')),
+        colors:[ctrl.graphColor],
+        options:{
+            animation: animate||false
+        }
+    }    
+    ctrl.chartDataset = dataset;
+  }
 
 
   /**
@@ -58,5 +75,12 @@ function quotesViewController(QuotesService,$scope){
       if(!this.quote || !this.quote.symbol) return '';
       return `https://cdn.toroinvestimentos.com.br/corretora/images/quote/${this.quote.symbol}.svg`;
   }
+  this.$onInit = function(){
+      this.setupChartDataset(true);
+
+      $interval(()=>{
+        this.setupChartDataset();
+      },500)
+  }  
 
 }

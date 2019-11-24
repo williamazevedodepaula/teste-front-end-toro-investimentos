@@ -3,12 +3,12 @@
         <md-tabs class="md-primary" md-dynamic-height>
             <md-tab label="Mais Valorizadas">
                 <md-content layout="row" layout-wrap>
-                    <quote-view ng-repeat="quote in $ctrl.getBetterEvaluatedQuotes()" flex-xs flex-gt-xs="50" layout="column"  quote="quote"></quote-view>
+                    <quote-view ng-repeat="quote in $ctrl.getBetterEvaluatedQuotes()" graph-color="'#84ba5b'" flex-xs flex-gt-xs="50" layout="column"  quote="quote"></quote-view>
                 </md-content>
             </md-tab>
             <md-tab label="Menos Valorizadas">
                 <md-content layout="row" layout-wrap>
-                    <quote-view ng-repeat="quote in $ctrl.getWorstEvaluatedQuotes()" flex-xs flex-gt-xs="50" layout="column"  quote="quote"></quote-view>
+                    <quote-view ng-repeat="quote in $ctrl.getWorstEvaluatedQuotes()"  graph-color="'#d35e60'" flex-xs flex-gt-xs="50" layout="column"  quote="quote"></quote-view>
                 </md-content>
             </md-tab>
         </md-tabs>

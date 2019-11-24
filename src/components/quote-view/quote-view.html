@@ -9,7 +9,8 @@
 
             </md-card-title-text>
             <md-card-title-media flex>
-                <div class="md-media-lg card-media"></div>
+                    <canvas ng-attr-id="{{quote.name}}" class="chart chart-line" chart-data="$ctrl.chartDataset.data" 
+                    chart-labels="$ctrl.chartDataset.labels" chart-colors="$ctrl.chartDataset.colors" chart-options="$ctrl.chartDataset.options"></canvas>
             </md-card-title-media>
         </md-card-title>
     </md-card>
