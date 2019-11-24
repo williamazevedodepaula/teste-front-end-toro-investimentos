@@ -8,7 +8,7 @@
   * 
 */
 angular.module('quotesModule').component('quotesPage',{
-    templateUrl:'./src/components/pages/quotes/quotes-page.html',
+    templateUrl:'./src/components/quotes-page/quotes-page.html',
     controller:['QuotesService',quotesPageController],
     bindings:{
         

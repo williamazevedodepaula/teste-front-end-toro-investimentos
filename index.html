@@ -3,19 +3,25 @@
 
 <html lang="pt-BR">
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="./node_modules/angular-material/angular-material.min.css">
+    </head>
+    <body ng-app="quotesModule">
         <script src="./node_modules/jquery/dist/jquery.min.js"></script>
         <script src="./node_modules/angular/angular.min.js"></script>
+        <script src="./node_modules/angular-animate/angular-animate.min.js"></script>
+        <script src="./node_modules/angular-aria/angular-aria.min.js"></script>
+        <script src="./node_modules/angular-messages/angular-messages.min.js"></script>
         <script src="./node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>        
-        <script src="./node_modules/angular-mocks/angular-mocks.js"></script>        
-        <script src="./node_modules/moment/min/moment.min.js"></script>        
+        <script src="./node_modules/angular-mocks/angular-mocks.js"></script>                
+        <script src="./node_modules/angular-material/angular-material.min.js"></script>
+        <script src="./node_modules/moment/min/moment.min.js"></script> 
 
         <script src="./src/module/app.js"></script>
 
-        <script src="./src/components/pages/quotes/quotes-page-controller.js"></script>
+        <script src="./src/components/quotes-page/quotes-page-controller.js"></script>
 
         <script src="./src/services/quotesService.js"></script>
-    </head>
-    <body ng-app="quotesModule">
         
         <div ui-view="content" id="page-content" class=""></div>
 
