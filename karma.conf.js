@@ -3,7 +3,6 @@
 
 module.exports = function(config) {
   config.set({
-  basePath: '',
   frameworks: ['mocha', 'chai'],
   files: [
     './node_modules/jquery/dist/jquery.min.js',
@@ -11,13 +10,14 @@ module.exports = function(config) {
     './node_modules/angular-ui-router/release/angular-ui-router.min.js',
     './node_modules/angular-mocks/angular-mocks.js',
     './node_modules/sinon/pkg/sinon.js',
+    './node_modules/moment/min/moment.min.js',
     './src/module/app.js',
     './src/services/**',
     './test/**',
   ],
   exclude: [],
   preprocessors: {},
-  reporters: ['progress'],
+  reporters: ['spec'],
   port: 9876,
   colors: true,
   logLevel: config.LOG_INFO,

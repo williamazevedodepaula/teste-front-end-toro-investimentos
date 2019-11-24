@@ -35,5 +35,3 @@ describe('CT0001 - Tests about connectio with quotesmock service',function(){
 
     });
 })
-
-//{"ABEV3": 208.84, "timestamp": 1574534260.107485}
